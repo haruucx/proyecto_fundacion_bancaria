@@ -5,3 +5,4 @@ void menuPublico();
 void limpiar();
 void pausa();
 void pendiente(char texto[]);
+void registrarPersona();
