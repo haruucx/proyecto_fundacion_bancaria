@@ -1,5 +1,6 @@
 #ifndef ARCHIVOS_H
 #define ARCHIVOS_H
+#include "estructuras.h"
 
 void guardarPersona(struct Persona p);
 void listarPersonas();
