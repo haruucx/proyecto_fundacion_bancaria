@@ -2,6 +2,9 @@
 #define ARCHIVOS_H
 #include "estructuras.h"
 
+int buscarPersona(char cedula[]);
+void guardarPersona(struct Persona p);
+
 void guardarPersona(struct Persona p);
 void listarPersonas();
 
