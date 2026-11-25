@@ -33,7 +33,7 @@ void guardarPersona(struct Persona p) {
         return;
     }
 
-    fprintf(arch, "%s\t|\t%s\t|\t%d\t|\t%s",
+    fprintf(arch, "%s\t|\t%s\t|\t%d\t|\t%s\n",
             p.cedula, p.nombre,
             p.municipio, p.telefono);
 
