@@ -4,8 +4,6 @@
 
 int buscarPersona(char cedula[]);
 void guardarPersona(struct Persona p);
-
-void guardarPersona(struct Persona p);
 void listarPersonas();
 
 void guardarEmpresa(struct Empresa e);

@@ -59,10 +59,13 @@ void registrarPersona() {
     scanf("%19s", p.telefono);
 
     if (!soloNumeros(p.telefono)) {
+        limpiar();
         printf("\nTelefono invalido\n");
         pausa();
         return;
     }
+
+    limpiar();
 
     guardarPersona(p);
 
