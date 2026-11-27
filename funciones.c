@@ -140,7 +140,6 @@ void menuPrincipal() {
         printf("  2. Gestion de entidades beneficiarias\n");
         printf("  0. Salir del programa\n");
         printf("--------------------------------------------\n");
-        printf("  Ingrese una opcion: ");
 
         op = leerOpcion();
 
