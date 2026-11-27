@@ -128,23 +128,42 @@ void menuPrincipal() {
 
     do {
         system("cls");
-        printf("1. Personas\n");
-        printf("2. Entidades beneficiarias\n");
-        printf("0. Salir\n");
+
+        printf("\n");
+        printf("============================================\n");
+        printf("       FUNDACION COLOMBIA SOLIDARIA\n");
+        printf("============================================\n");
+        printf("\n");
+        printf("              MENU PRINCIPAL\n");
+        printf("--------------------------------------------\n");
+        printf("  1. Gestion de personas\n");
+        printf("  2. Gestion de entidades beneficiarias\n");
+        printf("  0. Salir del programa\n");
+        printf("--------------------------------------------\n");
+        printf("  Ingrese una opcion: ");
+
         op = leerOpcion();
 
         switch (op) {
             case 1:
                 menuPersonas();
                 break;
+
             case 2:
                 menuEntidades();
                 break;
+
             case 0:
+                printf("\n");
+                printf("============================================\n");
+                printf("       Gracias por utilizar el sistema\n");
+                printf("============================================\n");
                 break;
+
             default:
-                printf("Opcion no valida.\n");
+                printf("\nOpcion no valida.\n");
                 system("pause");
         }
+
     } while (op != 0);
 }
