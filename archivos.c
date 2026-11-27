@@ -1,127 +1,223 @@
 #include <stdio.h>
 #include <string.h>
 #include "archivos.h"
+#include "funciones.h"
 
-int buscarPersona(char cedula[]) {
-    struct Persona p;
-    FILE *arch = fopen("personas.txt", "r");
+int leerCampo(FILE *archivo, char destino[], int tam) {
+    char linea[200];
+    int i, largo;
 
-    if (arch == NULL) return 0;
+    if (fgets(linea, 200, archivo) == NULL) {
+        return 0;
+    }
 
-    while (fscanf(arch, "%19[^|]|%59[^|]|%d|%19[^\n]\n",
-                  p.cedula, p.nombre, &p.municipio, p.telefono) == 4) {
-        if (strcmp(p.cedula, cedula) == 0) {
-            fclose(arch);
-            return 1;
+    largo = strlen(linea);
+
+    while (largo > 0 && (linea[largo - 1] == '\n' || linea[largo - 1] == '\r')) {
+        largo--;
+        linea[largo] = '\0';
+    }
+
+    if (largo == 0 || largo >= tam) {
+        return -1;
+    }
+
+    for (i = 0; i <= largo; i++) {
+        destino[i] = linea[i];
+    }
+
+    return 1;
+}
+
+int existeMunicipio(char codigo[]) {
+    char cod[10], nombre[40], departamento[10];
+    int encontrado = 0;
+    FILE *archivo = fopen("municipios.txt", "r");
+
+    if (archivo == NULL) {
+        return -1;
+    }
+
+    while (leerCampo(archivo, cod, 10) == 1 &&
+           leerCampo(archivo, nombre, 40) == 1 &&
+           leerCampo(archivo, departamento, 10) == 1) {
+        if (iguales(cod, codigo)) {
+            encontrado = 1;
         }
     }
 
-    fclose(arch);
-    return 0;
+    fclose(archivo);
+    return encontrado;
 }
 
-int buscarEmpresa(char nit[]) {
-    struct Empresa e;
-    FILE *arch = fopen("empresas.txt", "r");
+void mostrarMunicipios() {
+    char cod[10], nombre[40], departamento[10];
+    FILE *archivo = fopen("municipios.txt", "r");
 
-    if (arch == NULL) return 0;
-
-    while (fscanf(arch, "%19[^|]|%59[^|]|%39[^|]|%d\n",
-                  e.nit, e.nombre, e.sector, &e.municipio) == 4) {
-        if (strcmp(e.nit, nit) == 0) {
-            fclose(arch);
-            return 1;
-        }
-    }
-
-    fclose(arch);
-    return 0;
-}
-
-int existeMunicipio(int codigo) {
-    struct Municipio m;
-    FILE *arch = fopen("municipios.txt", "r");
-
-    if (arch == NULL) return 0;
-
-    while (fscanf(arch, "%d|%39[^|]|%d\n",
-                  &m.codigo, m.nombre, &m.departamento) == 3) {
-        if (m.codigo == codigo) {
-            fclose(arch);
-            return 1;
-        }
-    }
-
-    fclose(arch);
-    return 0;
-}
-
-void guardarPersona(struct Persona p) {
-    FILE *arch = fopen("personas.txt", "a");
-
-    if (arch == NULL) {
-        printf("\nError al abrir personas.txt\n");
+    if (archivo == NULL) {
         return;
     }
 
-    fprintf(arch, "%s|%s|%d|%s\n",
+    while (leerCampo(archivo, cod, 10) == 1 &&
+           leerCampo(archivo, nombre, 40) == 1 &&
+           leerCampo(archivo, departamento, 10) == 1) {
+        printf("%s. %s\n", cod, nombre);
+    }
+
+    fclose(archivo);
+}
+
+int leerMunicipio(char destino[]) {
+    int existe;
+
+    mostrarMunicipios();
+
+    do {
+        leerNumero("Ingrese el codigo del municipio: ", destino, 10);
+        existe = existeMunicipio(destino);
+        if (existe == 0) {
+            printf("El municipio no existe.\n");
+        }
+    } while (existe == 0);
+
+    if (existe == -1) {
+        printf("No se pudo abrir municipios.txt\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+int cargarPersonas(struct Persona v[]) {
+    struct Persona p;
+    int n = 0;
+    int estado;
+    FILE *archivo = fopen("personas.txt", "r");
+
+    if (archivo == NULL) {
+        return 0;
+    }
+
+    estado = leerCampo(archivo, p.cedula, 20);
+
+    while (estado == 1) {
+        if (n == MAX ||
+            leerCampo(archivo, p.nombre, 60) != 1 ||
+            leerCampo(archivo, p.municipio, 10) != 1 ||
+            leerCampo(archivo, p.telefono, 20) != 1) {
+            estado = -1;
+        } else {
+            v[n] = p;
+            n++;
+            estado = leerCampo(archivo, p.cedula, 20);
+        }
+    }
+
+    fclose(archivo);
+
+    if (estado == -1) {
+        return -1;
+    }
+
+    return n;
+}
+
+void agregarPersona(struct Persona p) {
+    FILE *archivo = fopen("personas.txt", "a");
+
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
+        return;
+    }
+
+    fprintf(archivo, "%s\n%s\n%s\n%s\n",
             p.cedula, p.nombre, p.municipio, p.telefono);
-    fclose(arch);
-    printf("\nPersona registrada correctamente.\n");
+    fclose(archivo);
+    printf("Persona registrada.\n");
 }
 
-void listarPersonas(void) {
-    struct Persona p;
-    FILE *arch = fopen("personas.txt", "r");
+void guardarPersonas(struct Persona v[], int n) {
+    int i;
+    FILE *archivo = fopen("personas.txt", "w");
 
-    if (arch == NULL) {
-        printf("\nTodavia no hay personas registradas.\n");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
         return;
     }
 
-    printf("\nCEDULA             NOMBRE                         MUNICIPIO  TELEFONO\n");
-    printf("--------------------------------------------------------------------------\n");
-
-    while (fscanf(arch, "%19[^|]|%59[^|]|%d|%19[^\n]\n",
-                  p.cedula, p.nombre, &p.municipio, p.telefono) == 4) {
-        printf("%-18s %-30s %-10d %s\n",
-               p.cedula, p.nombre, p.municipio, p.telefono);
+    for (i = 0; i < n; i++) {
+        fprintf(archivo, "%s\n%s\n%s\n%s\n",
+                v[i].cedula, v[i].nombre, v[i].municipio, v[i].telefono);
     }
 
-    fclose(arch);
+    fclose(archivo);
+    printf("Persona modificada.\n");
 }
 
-void guardarEmpresa(struct Empresa e) {
-    FILE *arch = fopen("empresas.txt", "a");
+int cargarEntidades(struct Entidad v[]) {
+    struct Entidad e;
+    int n = 0;
+    int estado;
+    FILE *archivo = fopen("entidades.txt", "r");
 
-    if (arch == NULL) {
-        printf("\nError al abrir empresas.txt\n");
+    if (archivo == NULL) {
+        return 0;
+    }
+
+    estado = leerCampo(archivo, e.nit, 20);
+
+    while (estado == 1) {
+        if (n == MAX ||
+            leerCampo(archivo, e.nombre, 60) != 1 ||
+            leerCampo(archivo, e.municipio, 10) != 1 ||
+            leerCampo(archivo, e.tipoAyuda, 50) != 1 ||
+            leerCampo(archivo, e.representante, 60) != 1) {
+            estado = -1;
+        } else {
+            v[n] = e;
+            n++;
+            estado = leerCampo(archivo, e.nit, 20);
+        }
+    }
+
+    fclose(archivo);
+
+    if (estado == -1) {
+        return -1;
+    }
+
+    return n;
+}
+
+void agregarEntidad(struct Entidad e) {
+    FILE *archivo = fopen("entidades.txt", "a");
+
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
         return;
     }
 
-    fprintf(arch, "%s|%s|%s|%d\n",
-            e.nit, e.nombre, e.sector, e.municipio);
-    fclose(arch);
-    printf("\nEmpresa registrada correctamente.\n");
+    fprintf(archivo, "%s\n%s\n%s\n%s\n%s\n",
+            e.nit, e.nombre, e.municipio, e.tipoAyuda, e.representante);
+    fclose(archivo);
+    printf("Entidad registrada.\n");
 }
 
-void listarEmpresas(void) {
-    struct Empresa e;
-    FILE *arch = fopen("empresas.txt", "r");
+void guardarEntidades(struct Entidad v[], int n) {
+    int i;
+    FILE *archivo = fopen("entidades.txt", "w");
 
-    if (arch == NULL) {
-        printf("\nTodavia no hay empresas registradas.\n");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
         return;
     }
 
-    printf("\nNIT                RAZON SOCIAL                   SECTOR                   MUNICIPIO\n");
-    printf("--------------------------------------------------------------------------------------\n");
-
-    while (fscanf(arch, "%19[^|]|%59[^|]|%39[^|]|%d\n",
-                  e.nit, e.nombre, e.sector, &e.municipio) == 4) {
-        printf("%-18s %-30s %-24s %d\n",
-               e.nit, e.nombre, e.sector, e.municipio);
+    for (i = 0; i < n; i++) {
+        fprintf(archivo, "%s\n%s\n%s\n%s\n%s\n",
+                v[i].nit, v[i].nombre, v[i].municipio,
+                v[i].tipoAyuda, v[i].representante);
     }
 
-    fclose(arch);
+    fclose(archivo);
+    printf("Entidad modificada.\n");
 }
