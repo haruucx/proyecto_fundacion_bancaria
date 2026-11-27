@@ -1,0 +1,4 @@
+1|Pereira|66
+2|Quibdo|27
+3|Dosquebradas|66
+4|Medellin|5

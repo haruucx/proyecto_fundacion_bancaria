@@ -1,17 +1,12 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 
-#include "estructuras.h"
-
-void menuPrincipal();
-void menuAdministrador();
-void menuContador();
-void menuPublico();
-void limpiar();
-void pausa();
-void pendiente(char texto[]);
-
-void registrarPersona();
+void menuPrincipal(void);
+void menuAdministrador(void);
+void limpiar(void);
+void pausa(void);
 int soloNumeros(char texto[]);
+void registrarPersona(void);
+void registrarEmpresa(void);
 
 #endif

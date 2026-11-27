@@ -1,0 +1,29 @@
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar proyecto",
+            "type": "process",
+            "command": "D:\\msys64\\ucrt64\\bin\\gcc.exe",
+            "args": [
+                "-Wall",
+                "-Wextra",
+                "-std=c11",
+                "${workspaceFolder}/main.c",
+                "${workspaceFolder}/funciones.c",
+                "${workspaceFolder}/archivos.c",
+                "-o",
+                "${workspaceFolder}/main.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
