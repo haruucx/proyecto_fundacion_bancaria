@@ -1,30 +1,20 @@
 #ifndef ARCHIVOS_H
 #define ARCHIVOS_H
+
+#include <stdio.h>
 #include "estructuras.h"
 
-int buscarPersona(char cedula[]);
-void guardarPersona(struct Persona p);
-void listarPersonas();
+int leerCampo(FILE *archivo, char destino[], int tam);
+int existeMunicipio(char codigo[]);
+void mostrarMunicipios();
+int leerMunicipio(char destino[]);
 
-void guardarEmpresa(struct Empresa e);
-void listarEmpresas();
+int cargarPersonas(struct Persona v[]);
+void agregarPersona(struct Persona p);
+void guardarPersonas(struct Persona v[], int n);
 
-void guardarDepartamento(struct Departamento d);
-void listarDepartamentos();
-
-void guardarMunicipio(struct Municipio m);
-void listarMunicipios();
-
-void guardarEntidad(struct Entidad e);
-void listarEntidades();
-
-void guardarDonacion(struct Donacion d);
-void listarDonaciones();
-
-void guardarEntrega(struct Entrega e);
-void listarEntregas();
-
-void guardarUsuario(struct Usuario u);
-void listarUsuarios();
+int cargarEntidades(struct Entidad v[]);
+void agregarEntidad(struct Entidad e);
+void guardarEntidades(struct Entidad v[], int n);
 
 #endif

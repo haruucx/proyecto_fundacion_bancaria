@@ -1,0 +1,40 @@
+900000001
+Fundacion Manos Unidas
+1
+Alimentos
+Rosa Palacios
+900000002
+Corporacion Nuevo Hogar
+2
+Vivienda
+Andres Mejia
+900000003
+Asociacion Vida Sana
+3
+Salud
+Camila Torres
+900000004
+Fundacion Aprender
+4
+Educacion
+Jorge Ramirez
+900000005
+Comedor La Esperanza
+5
+Alimentos
+Marta Ospina
+900000006
+Red de Apoyo del San Juan
+6
+Agua potable
+Elkin Moreno
+900000007
+Fundacion Abrigo
+7
+Ropa y cobijas
+Paola Vargas
+900000008
+Brigada Solidaria
+8
+Atencion medica
+Felipe Castro

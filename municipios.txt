@@ -1,0 +1,24 @@
+1
+Pereira
+66
+2
+Quibdo
+27
+3
+Dosquebradas
+66
+4
+Medellin
+5
+5
+Santa Rosa de Cabal
+66
+6
+Istmina
+27
+7
+Cali
+76
+8
+Bogota
+11
